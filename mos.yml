@@ -47,13 +47,13 @@ filesystem:
 
 config_schema:
   - ["device.listen_ports", "i", 123, {title: "Bit mask of listen ports"}]
-#  - ["mqtt.server", "ohoronka.com:1883"] #"192.168.7.115:1883"] #"ohoronka.com:1883"]
-#  - ["mqtt.enable", true]
-#  - ["mqtt.client_id", "4"] # ?
-#  - ["mqtt.user", "4"]
-#  - ["mqtt.pass", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"]
-#  - ["device.id", "4"] # ?
-#  - ["device.password", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"] # ?
+  - ["mqtt.server", "ohoronka.com:1883"] #"192.168.7.115:1883"] #"ohoronka.com:1883"]
+  - ["mqtt.enable", true]
+  - ["mqtt.client_id", "4"] # ?
+  - ["mqtt.user", "4"]
+  - ["mqtt.pass", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"]
+  - ["device.id", "4"] # ?
+  - ["device.password", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"] # ?
 #  - ["device.gpio_listen", "i", 12336, {title: "Listen GPIO ports"}]
 #  - ["device.gpio_pull", "i", 0, {title: "Listen GPIO ports pull"}]
 #  - ["debug.stderr_topic", ""]

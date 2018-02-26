@@ -6,6 +6,7 @@
 #define BEEP_OFF_LEVEL true
 
 static int alarm = 0;
+static int mqtt_enabled = 0;
 //static int maintenance = 0;
 
 void alarm_beep() {
@@ -32,6 +33,9 @@ int ports_state(){
 }
 
 void send_heartbeat(){
+    if(!mqtt_enabled) {
+        return;
+    }
     char topic[100], message[100];
     struct json_out out = JSON_OUT_BUF(message, sizeof(message));
     snprintf(topic, sizeof(topic), "/%s/m", mgos_sys_config_get_device_id());
@@ -67,7 +71,23 @@ void alarm_rpc(struct mg_rpc_request_info *ri, void *cb_arg,
     (void) fi;
 }
 
+static void mqtt_status(struct mg_connection *con, int ev, void *data, void *user_data) {
+    switch(ev){
+        case MG_EV_MQTT_CONNACK:
+            mqtt_enabled = 1;
+            break;
+        case MG_EV_CLOSE: // we received a message
+            mqtt_enabled = 0;
+            break;
+    }
+    (void) con;
+    (void) data;
+    (void) user_data;
+}
+
 enum mgos_app_init_result mgos_app_init(void) {
+    mgos_mqtt_add_global_handler(mqtt_status, NULL);
+
     init_ports();
     mgos_set_timer(500 /* ms */, true /* repeat */, alarm_beep, NULL);
 
