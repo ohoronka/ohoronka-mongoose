@@ -45,6 +45,27 @@ filesystem:
 # config_schema:
 #  - ["debug.level", 3]
 
+config_schema:
+  - ["device.listen_ports", "i", 123, {title: "Bit mask of listen ports"}]
+#  - ["mqtt.server", "ohoronka.com:1883"] #"192.168.7.115:1883"] #"ohoronka.com:1883"]
+#  - ["mqtt.enable", true]
+#  - ["mqtt.client_id", "4"] # ?
+#  - ["mqtt.user", "4"]
+#  - ["mqtt.pass", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"]
+#  - ["device.id", "4"] # ?
+#  - ["device.password", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"] # ?
+#  - ["device.gpio_listen", "i", 12336, {title: "Listen GPIO ports"}]
+#  - ["device.gpio_pull", "i", 0, {title: "Listen GPIO ports pull"}]
+#  - ["debug.stderr_topic", ""]
+#  - ["debug.stdout_topic", ""]
+#  - ["update.enable_post", false]
+#  - ["sntp.enable", false]
+#  - ["rpc.ws.enable", false]
+#  - ["http.enable", false]
+#  - ["wifi.ap.ssid", "ohoronka4"]
+#  - ["wifi.ap.pass", "12345678"]
+#  - ["wifi.ap.enable", false]
+
 
 # List of libraries used by this app, in order of initialisation
 libs:
@@ -53,6 +74,22 @@ libs:
   - origin: https://github.com/mongoose-os-libs/rpc-service-fs
   - origin: https://github.com/mongoose-os-libs/rpc-uart
   - origin: https://github.com/mongoose-os-libs/wifi
+  - origin: https://github.com/mongoose-os-libs/rpc-mqtt
+
+#  - origin: https://github.com/mongoose-os-libs/http-server
+#  - origin: https://github.com/mongoose-os-libs/ota-http-server
+#  - origin: https://github.com/mongoose-os-libs/rpc-loopback
+#  - origin: https://github.com/mongoose-os-libs/rpc-mqtt
+#  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+#  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+#  - origin: https://github.com/mongoose-os-libs/rpc-service-gpio
+#  - origin: https://github.com/mongoose-os-libs/rpc-service-i2c
+#  - origin: https://github.com/mongoose-os-libs/rpc-service-ota
+#  - origin: https://github.com/mongoose-os-libs/rpc-uart
+#  - origin: https://github.com/mongoose-os-libs/spi
+#  - origin: https://github.com/mongoose-os-libs/vfs-dev-spi-flash
+#  - origin: https://github.com/mongoose-os-libs/wifi
+#  - origin: https://github.com/mongoose-os-libs/rpc-common
 
 # Used by the mos tool to catch mos binaries incompatible with this file format
 manifest_version: 2017-05-18
