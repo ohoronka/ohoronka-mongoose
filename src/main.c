@@ -21,10 +21,10 @@ void alarm_beep() {
 }
 
 int ports_state(){
-    int listen_ports = mgos_sys_config_get_device_listen_ports();
+    int gpio_listen = mgos_sys_config_get_device_gpio_listen();
     int result = 0;
     for (int pin = 0; pin < 16; pin++){
-        if((listen_ports >> pin) && 1) {
+        if((gpio_listen >> pin) && 1) {
             int pin_state = mgos_gpio_read(pin);
             result = result | ((pin_state & 1) << pin);
         }
@@ -51,9 +51,9 @@ static void on_port_changed(int pin, void *arg) {
 }
 
 void init_ports(){
-    int listen_ports = mgos_sys_config_get_device_listen_ports();
+    int gpio_listen = mgos_sys_config_get_device_gpio_listen();
     for(int pin = 0; pin < 16; pin ++){
-        if((listen_ports >> pin) && 1) {
+        if((gpio_listen >> pin) && 1) {
             mgos_gpio_set_button_handler(pin, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_ANY, 50, on_port_changed, NULL);
         }
     }

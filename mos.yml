@@ -46,24 +46,20 @@ filesystem:
 #  - ["debug.level", 3]
 
 config_schema:
-  - ["device.listen_ports", "i", 123, {title: "Bit mask of listen ports"}]
   - ["mqtt.server", "ohoronka.com:1883"] #"192.168.7.115:1883"] #"ohoronka.com:1883"]
   - ["mqtt.enable", true]
-  - ["mqtt.client_id", "4"] # ?
-  - ["mqtt.user", "4"]
-  - ["mqtt.pass", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"]
-  - ["device.id", "4"] # ?
-  - ["device.password", "4osADLHYukC50mNiypEPBQ1qZPkGMw1WpWJZE4eQ"] # ?
-#  - ["device.gpio_listen", "i", 12336, {title: "Listen GPIO ports"}]
-#  - ["device.gpio_pull", "i", 0, {title: "Listen GPIO ports pull"}]
-#  - ["debug.stderr_topic", ""]
-#  - ["debug.stdout_topic", ""]
-#  - ["update.enable_post", false]
-#  - ["sntp.enable", false]
-#  - ["rpc.ws.enable", false]
+  - ["mqtt.client_id", ""]
+  - ["mqtt.user", ""]
+  - ["mqtt.pass", ""]
+  - ["device.id", ""]
+  - ["device.password", ""]
+  - ["device.gpio_listen", "i", 0, {title: "Listen GPIO ports"}]
+  - ["debug.stderr_topic", ""]
+  - ["debug.stdout_topic", ""]
+  - ["rpc.ws.enable", false]
   - ["http.enable", false]
-  - ["wifi.ap.ssid", "ohoronka4"]
-  - ["wifi.ap.pass", "12345678"]
+  - ["wifi.ap.ssid", ""]
+  - ["wifi.ap.pass", ""]
   - ["wifi.ap.enable", false]
 
 
