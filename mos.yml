@@ -61,10 +61,10 @@ config_schema:
 #  - ["update.enable_post", false]
 #  - ["sntp.enable", false]
 #  - ["rpc.ws.enable", false]
-#  - ["http.enable", false]
-#  - ["wifi.ap.ssid", "ohoronka4"]
-#  - ["wifi.ap.pass", "12345678"]
-#  - ["wifi.ap.enable", false]
+  - ["http.enable", false]
+  - ["wifi.ap.ssid", "ohoronka4"]
+  - ["wifi.ap.pass", "12345678"]
+  - ["wifi.ap.enable", false]
 
 
 # List of libraries used by this app, in order of initialisation
@@ -75,6 +75,8 @@ libs:
   - origin: https://github.com/mongoose-os-libs/rpc-uart
   - origin: https://github.com/mongoose-os-libs/wifi
   - origin: https://github.com/mongoose-os-libs/rpc-mqtt
+  - origin: https://github.com/mongoose-os-libs/http-server
+  - origin: https://github.com/mongoose-os-libs/rpc-service-ota
 
 #  - origin: https://github.com/mongoose-os-libs/http-server
 #  - origin: https://github.com/mongoose-os-libs/ota-http-server

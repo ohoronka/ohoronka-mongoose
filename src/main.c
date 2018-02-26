@@ -4,10 +4,11 @@
 
 #define BEEP_PIN 14
 #define BEEP_OFF_LEVEL true
+#define MAINTENANCE_PIN 0
 
 static int alarm = 0;
 static int mqtt_enabled = 0;
-//static int maintenance = 0;
+static int maintenance = 0;
 
 void alarm_beep() {
     if (alarm){
@@ -85,6 +86,21 @@ static void mqtt_status(struct mg_connection *con, int ev, void *data, void *use
     (void) user_data;
 }
 
+static void maintenance_handler(int pin, void *arg) {
+    if(!maintenance){
+        maintenance = 1;
+        mgos_sys_config_set_http_enable(true);
+        mgos_sys_config_set_wifi_ap_enable(true);
+        char *err = NULL;
+        save_cfg(&mgos_sys_config, &err); /* Writes conf9.json */
+        printf("Saving configuration: %s\n", err ? err : "no error");
+        free(err);
+        mgos_system_restart();
+    }
+    (void) pin;
+    (void) arg;
+}
+
 enum mgos_app_init_result mgos_app_init(void) {
     mgos_mqtt_add_global_handler(mqtt_status, NULL);
 
@@ -94,6 +110,12 @@ enum mgos_app_init_result mgos_app_init(void) {
     // alarm rpc handler
     struct mg_rpc *rpc = mgos_rpc_get_global();
     mg_rpc_add_handler(rpc, "alarm", "{enabled: %d}", alarm_rpc, NULL);
+
+    maintenance = mgos_sys_config_get_http_enable();
+    if(!maintenance){
+        mgos_gpio_set_button_handler(MAINTENANCE_PIN, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_ANY, 50 /* debounce_ms */,
+                                     maintenance_handler, NULL);
+    }
 
     return MGOS_APP_INIT_SUCCESS;
 }
