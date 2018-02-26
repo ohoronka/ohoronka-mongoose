@@ -1,8 +1,22 @@
 #include "mgos.h"
 #include "mgos_mqtt.h"
+#include "mgos_rpc.h"
+
+#define BEEP_PIN 14
+#define BEEP_OFF_LEVEL true
 
 static int alarm = 0;
 //static int maintenance = 0;
+
+void alarm_beep() {
+    if (alarm){
+        mgos_gpio_toggle(BEEP_PIN);
+    }
+    else
+    {
+        mgos_gpio_write(BEEP_PIN, BEEP_OFF_LEVEL);
+    }
+}
 
 int ports_state(){
     int listen_ports = mgos_sys_config_get_device_listen_ports();
@@ -40,7 +54,26 @@ void init_ports(){
     }
 }
 
+void alarm_rpc(struct mg_rpc_request_info *ri, void *cb_arg,
+               struct mg_rpc_frame_info *fi,
+               struct mg_str args) {
+    int enabled = 0;
+    json_scanf(args.p, args.len, ri->args_fmt, &enabled);
+    alarm = enabled;
+    mg_rpc_send_responsef(ri, NULL);
+    ri = NULL;
+
+    (void) cb_arg;
+    (void) fi;
+}
+
 enum mgos_app_init_result mgos_app_init(void) {
-  init_ports();
-  return MGOS_APP_INIT_SUCCESS;
+    init_ports();
+    mgos_set_timer(500 /* ms */, true /* repeat */, alarm_beep, NULL);
+
+    // alarm rpc handler
+    struct mg_rpc *rpc = mgos_rpc_get_global();
+    mg_rpc_add_handler(rpc, "alarm", "{enabled: %d}", alarm_rpc, NULL);
+
+    return MGOS_APP_INIT_SUCCESS;
 }
