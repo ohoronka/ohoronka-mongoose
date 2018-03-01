@@ -2,7 +2,7 @@
 #include "mgos_mqtt.h"
 #include "mgos_rpc.h"
 
-#define BEEP_PIN 14
+#define BEEP_PIN 2
 #define BEEP_OFF_LEVEL true
 #define MAINTENANCE_PIN 0
 
@@ -10,17 +10,19 @@ static int alarm = 0;
 static int mqtt_enabled = 0;
 static int maintenance = 0;
 
-void alarm_beep() {
+static void alarm_beep(void *args) {
     if (alarm){
         mgos_gpio_toggle(BEEP_PIN);
+        LOG(LL_INFO, ("Alarm!!!"));
     }
     else
     {
         mgos_gpio_write(BEEP_PIN, BEEP_OFF_LEVEL);
     }
+    (void) args;
 }
 
-int ports_state(){
+static int ports_state(){
     int gpio_listen = mgos_sys_config_get_device_gpio_listen();
     int result = 0;
     for (int pin = 0; pin < 16; pin++){
@@ -33,7 +35,7 @@ int ports_state(){
     return result;
 }
 
-void send_heartbeat(){
+static void send_heartbeat(void *args){
     if(!mqtt_enabled) {
         return;
     }
@@ -42,10 +44,12 @@ void send_heartbeat(){
     snprintf(topic, sizeof(topic), "/%s/m", mgos_sys_config_get_device_id());
     json_printf(&out, "{alarm: %d, gpio: %d}", alarm, ports_state());
     mgos_mqtt_pub(topic, message, strlen(message), 1, false);
+    (void) args;
 }
 
 static void on_port_changed(int pin, void *arg) {
-    send_heartbeat();
+    LOG(LL_INFO, ("Port %d changed", pin));
+    send_heartbeat(arg);
     (void) pin;
     (void) arg;
 }
@@ -53,7 +57,8 @@ static void on_port_changed(int pin, void *arg) {
 void init_ports(){
     int gpio_listen = mgos_sys_config_get_device_gpio_listen();
     for(int pin = 0; pin < 16; pin ++){
-        if((gpio_listen >> pin) && 1) {
+        if((gpio_listen >> pin) & 1) {
+            LOG(LL_INFO, ("set handler for pin: %d", pin));
             mgos_gpio_set_button_handler(pin, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_ANY, 50, on_port_changed, NULL);
         }
     }
@@ -65,6 +70,7 @@ void alarm_rpc(struct mg_rpc_request_info *ri, void *cb_arg,
     int enabled = 0;
     json_scanf(args.p, args.len, ri->args_fmt, &enabled);
     alarm = enabled;
+    LOG(LL_INFO, ("Alarm was set to: %d", alarm));
     mg_rpc_send_responsef(ri, NULL);
     ri = NULL;
 
@@ -102,10 +108,12 @@ static void maintenance_handler(int pin, void *arg) {
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
+    LOG(LL_INFO, ("start: mgos_app_init"));
     mgos_mqtt_add_global_handler(mqtt_status, NULL);
 
     init_ports();
     mgos_set_timer(500 /* ms */, true /* repeat */, alarm_beep, NULL);
+    mgos_set_timer(mgos_sys_config_get_device_heartbeat_interval() /* ms */, true /* repeat */, send_heartbeat, NULL);
 
     // alarm rpc handler
     struct mg_rpc *rpc = mgos_rpc_get_global();
@@ -117,5 +125,6 @@ enum mgos_app_init_result mgos_app_init(void) {
                                      maintenance_handler, NULL);
     }
 
+    LOG(LL_INFO, ("stop: mgos_app_init"));
     return MGOS_APP_INIT_SUCCESS;
 }

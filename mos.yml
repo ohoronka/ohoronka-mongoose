@@ -52,14 +52,15 @@ config_schema:
   - ["mqtt.user", ""]
   - ["mqtt.pass", ""]
   - ["device.id", ""]
-  - ["device.password", ""]
+  - ["device.heartbeat_interval", "i", 5000, {"title": "Heartbeat interval"}]
+#  - ["device.password", ""]
   - ["device.gpio_listen", "i", 0, {title: "Listen GPIO ports"}]
   - ["debug.stderr_topic", ""]
   - ["debug.stdout_topic", ""]
   - ["rpc.ws.enable", false]
   - ["http.enable", false]
-  - ["wifi.ap.ssid", ""]
-  - ["wifi.ap.pass", ""]
+  - ["wifi.ap.ssid", "ohoronka"]
+  - ["wifi.ap.pass", "12345678"]
   - ["wifi.ap.enable", false]
 
 
