@@ -2,8 +2,8 @@
 #include "mgos_mqtt.h"
 #include "mgos_rpc.h"
 
-#define BEEP_PIN 2
-#define BEEP_OFF_LEVEL true
+#define BEEP_PIN 14
+#define BEEP_OFF_LEVEL false
 #define MAINTENANCE_PIN 0
 
 static int alarm = 0;
@@ -108,6 +108,9 @@ static void maintenance_handler(int pin, void *arg) {
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
+    mgos_gpio_set_mode(BEEP_PIN, MGOS_GPIO_MODE_OUTPUT);
+    mgos_gpio_write(BEEP_PIN, BEEP_OFF_LEVEL);
+
     LOG(LL_INFO, ("start: mgos_app_init"));
     mgos_mqtt_add_global_handler(mqtt_status, NULL);
 
