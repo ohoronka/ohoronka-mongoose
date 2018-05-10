@@ -124,8 +124,9 @@ enum mgos_app_init_result mgos_app_init(void) {
 
     maintenance = mgos_sys_config_get_http_enable();
     if(!maintenance){
-        mgos_gpio_set_button_handler(MAINTENANCE_PIN, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_ANY, 50 /* debounce_ms */,
-                                     maintenance_handler, NULL);
+        LOG(LL_INFO, ("NO MAINTENANCE"));
+        mgos_gpio_set_button_handler(MAINTENANCE_PIN, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_POS,
+                                     200, maintenance_handler, NULL);
     }
 
     LOG(LL_INFO, ("stop: mgos_app_init"));
