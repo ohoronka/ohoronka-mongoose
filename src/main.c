@@ -41,7 +41,7 @@ static void send_heartbeat(void *args){
     }
     char topic[100], message[100];
     struct json_out out = JSON_OUT_BUF(message, sizeof(message));
-    snprintf(topic, sizeof(topic), "/%s/m", mgos_sys_config_get_device_id());
+    snprintf(topic, sizeof(topic), "%s/m", mgos_sys_config_get_device_id());
     json_printf(&out, "{alarm: %d, gpio: %d}", alarm, ports_state());
     mgos_mqtt_pub(topic, message, strlen(message), 1, false);
     (void) args;
