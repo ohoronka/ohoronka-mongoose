@@ -97,6 +97,7 @@ static void maintenance_handler(int pin, void *arg) {
         maintenance = 1;
         mgos_sys_config_set_http_enable(true);
         mgos_sys_config_set_wifi_ap_enable(true);
+        mgos_sys_config_set_wifi_sta_enable(false);
         char *err = NULL;
         save_cfg(&mgos_sys_config, &err); /* Writes conf9.json */
         printf("Saving configuration: %s\n", err ? err : "no error");
