@@ -59,7 +59,8 @@ void init_ports(){
     for(int pin = 0; pin < 16; pin ++){
         if((gpio_listen >> pin) & 1) {
             LOG(LL_INFO, ("set handler for pin: %d", pin));
-            mgos_gpio_set_button_handler(pin, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_ANY, 50, on_port_changed, NULL);
+            mgos_gpio_set_mode(pin, MGOS_GPIO_MODE_INPUT);
+            mgos_gpio_set_button_handler(pin, MGOS_GPIO_PULL_NONE, MGOS_GPIO_INT_EDGE_NEG, 50, on_port_changed, NULL);
         }
     }
 }
@@ -126,6 +127,7 @@ enum mgos_app_init_result mgos_app_init(void) {
     maintenance = mgos_sys_config_get_http_enable();
     if(!maintenance){
         LOG(LL_INFO, ("NO MAINTENANCE"));
+        mgos_gpio_set_mode(MAINTENANCE_PIN, MGOS_GPIO_MODE_INPUT);
         mgos_gpio_set_button_handler(MAINTENANCE_PIN, MGOS_GPIO_PULL_UP, MGOS_GPIO_INT_EDGE_POS,
                                      200, maintenance_handler, NULL);
     }

@@ -62,8 +62,8 @@ config_schema:
   - ["wifi.ap.ssid", "OHORONKA_2"]
   - ["wifi.ap.pass", "12345678"]
   - ["wifi.ap.enable", false]
-  - ["wifi.sta.ssid", "Talkable"]
-  - ["wifi.sta.pass", "object_or_array"]
+  - ["wifi.sta.ssid", "AP"]
+  - ["wifi.sta.pass", "0509435618"]
   - ["wifi.sta.enable", true]
 
 
