@@ -46,7 +46,8 @@ filesystem:
 #  - ["debug.level", 3]
 
 config_schema:
-  - ["mqtt.server", "ohoronka.com:1883"] #"192.168.7.115:1883"] #"ohoronka.com:1883"]
+  - ["mqtt.server", "ohoronka.com:8883"]
+  - ["mqtt.ssl_ca_cert", "ca.pem"]
   - ["mqtt.enable", true]
   - ["mqtt.client_id", "2"]
   - ["mqtt.user", "2"]
